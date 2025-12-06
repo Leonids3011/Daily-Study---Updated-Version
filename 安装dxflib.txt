@@ -1,0 +1,43 @@
+# 如果解压失败，使用这个替代包
+wget https://github.com/melak47/dxflib/archive/refs/tags/v2.5.0.0.tar.gz -O dxflib-2.5.0.0.tar.gz
+tar -xzf dxflib-2.5.0.0.tar.gz
+cd dxflib-2.5.0.0
+# 查看目录结构，确定源码位置
+# 通常包含以下文件：
+# src/ 目录中有 cpp 和 h 文件
+# 或者直接有 dl_dxf.h 等文件
+
+# 如果使用 qmake
+find . -name "*.pro" -o -name "Makefile" -o -name "CMakeLists.txt"
+
+# 如果找到 .pro 文件
+qmake dxflib.pro
+make -j$(nproc)
+
+# 如果没有 qmake，手动编译
+cd src
+g++ -c *.cpp -I. -fPIC
+ar rcs libdxflib.a *.o
+g++ -shared -o libdxflib.so *.o
+# 创建安装目录
+sudo mkdir -p /usr/local/include/dxflib
+sudo mkdir -p /usr/local/lib
+
+# 复制头文件
+sudo cp *.h /usr/local/include/dxflib/
+# 或者，如果头文件在 include/ 目录
+sudo cp include/*.h /usr/local/include/dxflib/
+
+# 复制库文件
+sudo cp libdxflib.* /usr/local/lib/
+
+# 更新库缓存
+sudo ldconfig
+# 验证头文件位置
+find /usr -name "dl_dxf.h" 2>/dev/null
+find /usr/local -name "dl_dxf.h" 2>/dev/null
+
+# 验证库文件
+find /usr -name "*dxflib*" 2>/dev/null
+find /usr/local -name "*dxflib*" 2>/dev/null
+
