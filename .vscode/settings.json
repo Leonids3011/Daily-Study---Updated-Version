@@ -1,70 +1,241 @@
 {
+  // ==================== 编辑器基础设置 ====================
+  "workbench.colorTheme": "One Dark Pro",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.startupEditor": "none",
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.tabSizing": "shrink",
+  "workbench.editor.closeEmptyGroups": false,
+  // ==================== 外观与字体 ====================
+  "editor.fontFamily": "'JetBrains Mono', 'Ubuntu Mono', 'monospace'", // Linux常用等宽字体
+  "editor.fontSize": 14,
+  "editor.lineHeight": 1.6,
+  "editor.fontLigatures": true,
+  "editor.rulers": [
+    80,
+    120
+  ],
+  "editor.minimap.enabled": false,
+  "editor.scrollBeyondLastLine": false,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorWidth": 2,
+  "editor.wordWrap": "on",
+  "editor.wordWrapColumn": 120,
+  // ==================== 编辑行为 ====================
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.trimAutoWhitespace": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.acceptSuggestionOnEnter": "smart",
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "files.eol": "\n", // Linux默认LF换行符
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/out": true,
+    "**/.cmake": true
+  },
+  // ==================== 版本控制(Git) ====================
+  "git.enableSmartCommit": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true
+  },
+  // ==================== Linux终端配置 ====================
+  "terminal.integrated.defaultProfile.linux": "bash", // 或"zsh"
+  "terminal.integrated.fontFamily": "'JetBrains Mono', 'Ubuntu Mono', 'monospace'",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.env.linux": {
+    "LC_ALL": "en_US.UTF-8", // 确保字符编码正确
+    "PATH": "${env:PATH}:/usr/local/bin:/usr/bin"
+  },
+  // ==================== JavaScript/TypeScript 配置 ====================
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  // ==================== HTML/CSS/JSON 配置 ====================
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // ==================== Python 配置（Linux） ====================
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit"
+    }
+  },
+  "python.pythonPath": "/usr/bin/env/Python3", // Linux默认Python路径
+  "python.formatting.provider": "black",
+  "python.linting.enabled": true,
+  "python.linting.lintOnSave": true,
+  "python.linting.ruffEnabled": true,
+  "python.analysis.autoImportCompletions": true,
+  // ==================== Markdown 配置 ====================
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "on",
+      "strings": "on",
+      "other": "on"
+    },
+    "editor.formatOnSave": false
+  },
+  // ==================== ESLint/Prettier 配置 ====================
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "html",
+    "vue"
+  ],
+  "eslint.codeAction.showDocumentation": {
+    "enable": true
+  },
+  "prettier.tabWidth": 4,
+  "prettier.singleQuote": true,
+  "prettier.semi": true,
+  "prettier.trailingComma": "es5",
+  "prettier.printWidth": 120,
+  "prettier.endOfLine": "lf",
+  // ==================== Vue 配置 ====================
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "volar.format.initialIndent": true,
+  "volar.codeLens.references": true,
+  // ==================== C/C++ 配置（Linux专属） ====================
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll": "explicit"
+    },
+    "editor.wordWrapColumn": 120,
+    "editor.rulers": [
+      80,
+      120
+    ]
+  },
+  "[c]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools",
+    "editor.formatOnSave": true
+  },
+  // Linux下C/C++编译器与标准配置
+  "C_Cpp.default.compilerPath": "/usr/bin/g++", // GCC路径（或/usr/bin/clang++）
+  "C_Cpp.default.cppStandard": "c++20",
+  "C_Cpp.default.cStandard": "c17",
+  "C_Cpp.intelliSenseMode": "gcc-x64", // Linux GCC模式
+  "C_Cpp.formatting": "clangFormat", // Linux推荐用clangFormat
+  "C_Cpp.codeAnalysis.runAutomatically": true,
+  "C_Cpp.errorSquiggles": "disabled",
+  // Linux系统头文件路径（适配Debian/Ubuntu系列）
+  "C_Cpp.default.includePath": [
+    "${workspaceFolder}/**",
+    "${workspaceFolder}/include",
+    "${workspaceFolder}/src/include",
+    "/usr/include",
+    "/usr/local/include",
+    "/usr/include/x86_64-linux-gnu", // 系统架构相关头文件
+    "/usr/lib/gcc/x86_64-linux-gnu/*/include", // GCC版本相关头文件
+    // 常见Linux第三方库路径
+    "/usr/include/opencv4", // OpenCV
+    "/usr/include/eigen3", // Eigen
+    "/usr/local/boost/include", // Boost（手动安装）
+    // 添加QT头文件路径（根据你的实际路径修改）
+    "/usr/include/x86_64-linux-gnu/qt5",
+    "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+    "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+    "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+    "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+    "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+  ],
+  "C_Cpp.default.browse.path": [
+    "${workspaceFolder}/**",
+    "/usr/include",
+    "/usr/local/include"
+  ],
+  "C_Cpp.default.defines": [
+    "_DEBUG",
+    "LINUX", // 标识Linux系统
+    "PROJECT_VERSION=1.0.0"
+  ],
+  // Clang-Format配置（Linux预装）
+  "clang-format.style": "Google",
+  "clang-format.executable": "/usr/bin/clang-format",
+  // 头文件关联
   "files.associations": {
-    "cctype": "cpp",
-    "clocale": "cpp",
-    "cmath": "cpp",
-    "cstdarg": "cpp",
-    "cstddef": "cpp",
-    "cstdio": "cpp",
-    "cstdlib": "cpp",
-    "cstring": "cpp",
-    "ctime": "cpp",
-    "cwchar": "cpp",
-    "cwctype": "cpp",
-    "array": "cpp",
-    "atomic": "cpp",
-    "hash_map": "cpp",
-    "hash_set": "cpp",
-    "strstream": "cpp",
-    "*.tcc": "cpp",
-    "bitset": "cpp",
-    "chrono": "cpp",
-    "complex": "cpp",
-    "condition_variable": "cpp",
-    "cstdint": "cpp",
-    "deque": "cpp",
-    "list": "cpp",
-    "unordered_map": "cpp",
-    "unordered_set": "cpp",
+    "*.h": "cpp",
+    "*.hpp": "cpp",
     "vector": "cpp",
-    "exception": "cpp",
-    "algorithm": "cpp",
-    "functional": "cpp",
-    "iterator": "cpp",
-    "map": "cpp",
-    "memory": "cpp",
-    "memory_resource": "cpp",
-    "numeric": "cpp",
-    "optional": "cpp",
-    "random": "cpp",
-    "ratio": "cpp",
-    "set": "cpp",
     "string": "cpp",
-    "string_view": "cpp",
-    "system_error": "cpp",
-    "tuple": "cpp",
-    "type_traits": "cpp",
-    "utility": "cpp",
-    "fstream": "cpp",
-    "initializer_list": "cpp",
-    "iomanip": "cpp",
-    "iosfwd": "cpp",
+    "array": "cpp",
+    "*.tcc": "cpp",
     "iostream": "cpp",
-    "istream": "cpp",
-    "limits": "cpp",
-    "mutex": "cpp",
-    "new": "cpp",
-    "ostream": "cpp",
-    "shared_mutex": "cpp",
-    "sstream": "cpp",
-    "stdexcept": "cpp",
-    "streambuf": "cpp",
-    "thread": "cpp",
-    "cfenv": "cpp",
-    "cinttypes": "cpp",
-    "typeindex": "cpp",
-    "typeinfo": "cpp",
-    "variant": "cpp",
-    "bit": "cpp"
-  }
+    "*.hxx": "cpp"
+  },
+  // ==================== 其他Linux优化 ====================
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.git": true,
+    "**/coverage": true,
+    "**/.cache": true,
+    "**/cmake-build-*": true
+  },
+  "security.workspace.trust.untrustedFiles": "open",
+  "update.mode": "default",
+  "extensions.autoUpdate": true,
+  "debug.inline Values": "on",
+  "debug.console.fontSize": 14,
+  "files.watcherExclude": { // 减少文件监听开销（Linux大项目优化）
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/tmp/**": true
+  },
+  "cmake.sourceDirectory": "/home/robot/photo_voltatic_ws/src/PhoVolCoorNameDxfParser/apps/json_processor"
 }
