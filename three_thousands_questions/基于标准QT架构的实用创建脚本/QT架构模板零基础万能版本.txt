@@ -1,0 +1,465 @@
+结构清晰，易于理解和维护
+支持模块化开发，方便扩展
+包含必要的目录和文件，方便组织代码和资源
+考虑到测试和文档
+以下是一个推荐的Qt项目模板，适合中大型项目，但也可以根据小型项目进行简化。
+模板结构如下：
+
+MyQtProject/
+├── CMakeLists.txt              # 主CMakeLists.txt
+├── cmake/                      # CMake模块目录（可选）
+│   ├── FindSomeLib.cmake
+│   └── ...
+├── README.md                   # 项目说明
+├── LICENSE                     # 许可证
+├── .gitignore                  # Git忽略文件
+├── .clang-format               # 代码格式化配置（可选）
+├── .clang-tidy                 # 代码检查配置（可选）
+├── src/                        # 源代码目录
+│   ├── main.cpp                # 程序入口
+│   ├── core/                   # 核心模块（主窗口、应用类等）
+│   │   ├── Application.cpp/.h
+│   │   ├── MainWindow.cpp/.h
+│   │   └── ...
+│   ├── models/                 # 数据模型
+│   │   ├── BaseModel.cpp/.h
+│   │   ├── UserModel.cpp/.h
+│   │   └── ...
+│   ├── views/                  # 视图（自定义控件、窗口等）
+│   │   ├── widgets/
+│   │   │   ├── CustomButton.cpp/.h
+│   │   │   └── ...
+│   │   ├── dialogs/
+│   │   │   ├── SettingsDialog.cpp/.h
+│   │   │   └── ...
+│   │   └── ...
+│   ├── controllers/            # 控制器（业务逻辑）
+│   │   ├── MainController.cpp/.h
+│   │   └── ...
+│   ├── services/               # 服务（数据、网络等）
+│   │   ├── DataService.cpp/.h
+│   │   ├── NetworkService.cpp/.h
+│   │   └── ...
+│   ├── utils/                  # 工具类
+│   │   ├── Logger.cpp/.h
+│   │   ├── ConfigManager.cpp/.h
+│   │   └── ...
+│   └── resources/              # 资源文件（嵌入到可执行文件中）
+│       ├── images/
+│       ├── qss/                # QSS样式表
+│       ├── translations/       # 翻译文件
+│       └── ...
+├── tests/                      # 单元测试
+│   ├── unit/                   # 单元测试
+│   │   ├── TestModel.cpp
+│   │   └── ...
+│   └── integration/            # 集成测试
+├── docs/                       # 文档
+│   ├── design/                 # 设计文档
+│   ├── api/                    # API文档（Doxygen生成）
+│   └── ...
+├── thirdparty/                 # 第三方库（如果需要包含源码）
+│   ├── some_lib/
+│   └── ...
+└── external/                   # 外部依赖（如动态库、工具等）
+
+注意：如果使用qmake，则用.pro文件代替CMakeLists.txt，但结构类似。
+我们提供CMakeLists.txt的基本内容：
+cmake_minimum_required(VERSION 3.16)
+project(MyQtProject VERSION 1.0.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+# 设置输出目录
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# 查找Qt库
+find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
+
+# 包含头文件目录
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+# 添加可执行文件
+add_executable(${PROJECT_NAME}
+    src/main.cpp
+    src/core/MainWindow.cpp
+    src/core/Application.cpp
+    # 其他源文件...
+)
+
+# 链接Qt库
+target_link_libraries(${PROJECT_NAME}
+    Qt6::Core
+    Qt6::Widgets
+)
+
+# 添加资源文件（如果使用Qt资源系统）
+qt_add_resources(${PROJECT_NAME} "resources"
+    PREFIX
+        "/"
+    FILES
+        src/resources/images/icon.png
+        # 其他资源文件...
+)
+
+# 安装目标（可选）
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+
+# 添加子目录，例如测试
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+对于小型项目，可以简化目录结构，例如：
+
+text
+SimpleQtApp/
+├── src/
+│   ├── main.cpp
+│   ├── MainWindow.cpp/.h
+│   ├── SomeModel.cpp/.h
+│   ├── SomeView.cpp/.h
+│   └── resources/
+├── tests/
+└── CMakeLists.txt
+这个模板可以根据项目需求进行调整。关键是要保持一致性，让团队成员都能理解。
+
+如果你使用qmake，那么.pro文件示例：
+
+qmake
+QT       += core gui
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TARGET = MyQtProject
+TEMPLATE = app
+
+SOURCES += \
+    src/main.cpp \
+    src/core/MainWindow.cpp \
+    src/core/Application.cpp \
+    # ... 其他源文件
+
+HEADERS += \
+    src/core/MainWindow.h \
+    src/core/Application.h \
+    # ... 其他头文件
+
+RESOURCES += \
+    src/resources.qrc
+
+# 设置构建目录
+DESTDIR = $$PWD/build
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.rcc
+UI_DIR = $$DESTDIR/.ui
+
+# 设置安装路径（可选）
+target.path = /usr/local/bin
+INSTALLS += target
+请根据实际情况选择构建系统（CMake或qmake）并调整目录结构。
+最后，建议在README.md中说明项目结构，以便新成员快速上手。
+
+////////////////////////////////////////////////////////////////////
+Qt 项目架构模板
+这是一个通用、灵活、可扩展的 Qt 项目模板，无论项目大小或类型，都可以基于此模板开始开发。
+
+📁 完整目录结构
+MyQtProject/
+├── CMakeLists.txt                  # 主 CMake 配置
+├── CMakePresets.json               # CMake 预设配置
+├── .gitignore                      # Git 忽略文件
+├── README.md                       # 项目说明文档
+├── CHANGELOG.md                    # 变更日志
+├── LICENSE                         # 许可证文件
+│
+├── src/                            # 源代码目录
+│   ├── main.cpp                    # 程序入口
+│   ├── core/                       # 核心框架
+│   │   ├── Application.h/.cpp      # 应用程序类
+│   │   ├── MainWindow.h/.cpp       # 主窗口类
+│   │   ├── AppConfig.h/.cpp        # 应用配置
+│   │   └── AppTheme.h/.cpp         # 主题管理
+│   │
+│   ├── models/                     # 数据模型层
+│   │   ├── BaseModel.h/.cpp        # 模型基类
+│   │   ├── DataItem.h/.cpp         # 数据项定义
+│   │   └── ListModel.h/.cpp        # 列表模型
+│   │
+│   ├── viewmodels/                 # 视图模型层 (MVVM)
+│   │   ├── BaseViewModel.h/.cpp    # 视图模型基类
+│   │   └── MainViewModel.h/.cpp    # 主视图模型
+│   │
+│   ├── views/                      # 视图层
+│   │   ├── widgets/                # 自定义控件
+│   │   │   ├── CustomButton.h/.cpp
+│   │   │   ├── IconButton.h/.cpp
+│   │   │   └── StatusBar.h/.cpp
+│   │   │
+│   │   ├── dialogs/                # 对话框
+│   │   │   ├── BaseDialog.h/.cpp
+│   │   │   ├── SettingsDialog.h/.cpp
+│   │   │   └── AboutDialog.h/.cpp
+│   │   │
+│   │   └── pages/                  # 页面视图
+│   │       ├── HomePage.h/.cpp
+│   │       ├── SettingsPage.h/.cpp
+│   │       └── HelpPage.h/.cpp
+│   │
+│   ├── services/                   # 服务层
+│   │   ├── DatabaseService.h/.cpp  # 数据库服务
+│   │   ├── NetworkService.h/.cpp   # 网络服务
+│   │   ├── FileService.h/.cpp      # 文件服务
+│   │   └── LogService.h/.cpp       # 日志服务
+│   │
+│   ├── managers/                   # 管理器
+│   │   ├── ResourceManager.h/.cpp  # 资源管理器
+│   │   ├── TaskManager.h/.cpp      # 任务管理器
+│   │   ├── PluginManager.h/.cpp    # 插件管理器
+│   │   └── EventManager.h/.cpp     # 事件管理器
+│   │
+│   ├── utils/                      # 工具类
+│   │   ├── Logger.h/.cpp           # 日志工具
+│   │   ├── Validator.h/.cpp        # 数据验证
+│   │   ├── Formatter.h/.cpp        # 格式化工具
+│   │   ├── FileUtils.h/.cpp        # 文件工具
+│   │   └── StringUtils.h/.cpp      # 字符串工具
+│   │
+│   ├── network/                    # 网络模块
+│   │   ├── ApiClient.h/.cpp        # API客户端
+│   │   ├── WebSocketClient.h/.cpp  # WebSocket
+│   │   └── RestApi.h/.cpp          # REST API
+│   │
+│   ├── database/                   # 数据库模块
+│   │   ├── DatabaseConnection.h/.cpp
+│   │   ├── SqlQueryBuilder.h/.cpp
+│   │   └── Migrations.h/.cpp
+│   │
+│   └── qml/                        # QML 文件 (可选)
+│       ├── main.qml
+│       ├── components/
+│       │   ├── Button.qml
+│       │   └── Card.qml
+│       └── pages/
+│           └── MainPage.qml
+│
+├── include/                        # 公共头文件 (库项目用)
+│   └── MyLibrary/
+│       └── MyLibrary.h
+│
+├── resources/                      # 应用程序资源
+│   ├── icons/                      # 图标资源
+│   │   ├── app.svg
+│   │   ├── toolbar/
+│   │   └── status/
+│   │
+│   ├── images/                     # 图片资源
+│   │   ├── splash.png
+│   │   └── backgrounds/
+│   │
+│   ├── fonts/                      # 字体文件
+│   │   └── customfont.ttf
+│   │
+│   ├── qss/                        # Qt 样式表
+│   │   ├── style.qss
+│   │   ├── dark.qss
+│   │   └── light.qss
+│   │
+│   ├── translations/               # 翻译文件
+│   │   ├── app_zh_CN.ts
+│   │   ├── app_en_US.ts
+│   │   └── app_ja_JP.ts
+│   │
+│   └── data/                       # 数据文件
+│       ├── config.json
+│       └── templates/
+│
+├── tests/                          # 测试目录
+│   ├── unit/                       # 单元测试
+│   │   ├── TestUtils.h/.cpp
+│   │   ├── TestModels.h/.cpp
+│   │   └── CMakeLists.txt
+│   │
+│   ├── integration/                # 集成测试
+│   │   └── TestIntegration.h/.cpp
+│   │
+│   └── mocks/                      # Mock 对象
+│       └── MockDatabase.h
+│
+├── docs/                           # 文档
+│   ├── api/                        # API 文档
+│   ├── design/                     # 设计文档
+│   ├── user/                       # 用户文档
+│   └── dev/                        # 开发文档
+│
+├── scripts/                        # 构建脚本
+│   ├── build.sh                    # Linux 构建脚本
+│   ├── build.ps1                   # Windows 构建脚本
+│   ├── deploy.sh                   # 部署脚本
+│   └── packaging/                  # 打包脚本
+│
+├── thirdparty/                     # 第三方库
+│   ├── catch2/                     # 测试框架
+│   ├── json/                       # JSON 库
+│   └── LICENSE-THIRDPARTY.md      # 第三方许可证
+│
+├── plugins/                        # 插件目录 (可选)
+│   ├── plugin1/
+│   └── plugin2/
+│
+└── tools/                          # 开发工具
+    ├── designer/                   # Qt Designer 插件
+    └── codegen/                    # 代码生成工具
+
+
+📝 核心文件模板
+1. main.cpp - 应用程序入口
+#include "core/Application.h"
+#include "core/MainWindow.h"
+#include <QApplication>
+
+int main(int argc, char *argv[])
+{
+    // 设置高DPI支持
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    
+    Application app(argc, argv);
+    
+    // 设置应用程序信息
+    app.setApplicationName("MyApp");
+    app.setOrganizationName("MyCompany");
+    app.setApplicationVersion("1.0.0");
+    
+    // 初始化应用程序
+    if (!app.init()) {
+        return 1;
+    }
+    
+    // 创建并显示主窗口
+    MainWindow mainWindow;
+    mainWindow.show();
+    
+    return app.exec();
+}
+
+2. Application.h - 应用程序类
+cpp
+#pragma once
+#include <QApplication>
+class Application : public QApplication
+{
+    Q_OBJECT
+public:
+    Application(int &argc, char **argv);
+    virtual ~Application();
+    bool init();
+    void cleanup();
+    // 单例访问
+    static Application* instance();
+    
+private:
+    void initSettings();
+    void initTheme();
+    void initTranslations();
+    void initServices();
+    
+    class Impl;
+    std::unique_ptr<Impl> d;
+};
+
+3. MainWindow.h - 主窗口类
+cpp
+#pragma once
+#include <QMainWindow>
+QT_BEGIN_NAMESPACE
+class QMenu;
+class QToolBar;
+class QStatusBar;
+class QTabWidget;
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+    
+public:
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow() override;
+    
+protected:
+    void closeEvent(QCloseEvent *event) override;
+    
+private slots:
+    void onSettings();
+    void onAbout();
+    void onExit();
+    
+private:
+    void createUi();
+    void createMenu();
+    void createToolBar();
+    void createStatusBar();
+    void createCentralWidget();
+    void loadSettings();
+    void saveSettings();
+    
+    class Impl;
+    std::unique_ptr<Impl> d;
+};
+4. CMakeLists.txt - 基础配置
+cmake
+cmake_minimum_required(VERSION 3.16)
+project(MyQtApp VERSION 1.0.0 LANGUAGES CXX)
+
+# 设置Qt版本
+set(QT_MIN_VERSION 6.2)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+# 查找Qt组件
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+
+# 设置C++标准
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# 设置输出目录
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# 包含目录
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+# 添加可执行文件
+add_executable(${PROJECT_NAME}
+    src/main.cpp
+    src/core/Application.cpp
+    src/core/MainWindow.cpp
+)
+
+# 链接Qt库
+target_link_libraries(${PROJECT_NAME}
+    Qt6::Core
+    Qt6::Widgets
+)
+
+# 添加资源
+qt_add_resources(${PROJECT_NAME} "resources"
+    PREFIX "/"
+    FILES
+        resources/icons/app.svg
+        resources/qss/style.qss
+)
+
+# 安装目标
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
